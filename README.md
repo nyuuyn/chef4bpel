@@ -12,13 +12,13 @@ Build:
 Run:
 - copy the chef4bpel-*.jar (pre-build under build/ or own build under target/) into the WSO2 BPS folders under {bps-root}/repository/components/lib 
 - add to or adjust {bps-root}/repository/conf/bps.xml with following lines:
-
+```xml
     <tns:ExtensionBundles xmlns:tns="http://wso2.org/bps/config">
         <tns:runtimes>
             <tns:runtime class="org.opentosca.chef4bpel.extension.Chef4BpelExtensionBundle"/>
         </tns:runtimes>
     </tns:ExtensionBundles> 
-
+```
 Chef4BPEL Test Process:
 =========
 - Deploy the provided .zip file under build/ unto you WSO2 BPS
