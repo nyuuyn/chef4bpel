@@ -1,10 +1,10 @@
-chef4bpel
+Chef4BPEL
 =========
 
 BPEL Extension to execute Chef scripts
 
 Chef4BPEL Extension Info:
-=========
+========
 Build:
 
 - run 'mvn clean package' in Chef4BPEL folder.
@@ -20,7 +20,7 @@ Run:
     </tns:ExtensionBundles> 
 ```
 Chef4BPEL Test Process:
-=========
+========
 - Deploy the provided .zip file under build/ unto you WSO2 BPS
 - Test with TryIt or some other soap tool
 
