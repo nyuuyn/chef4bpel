@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.opentosca.org/bpel/chef4bpel"
+	xmlns:tns="http://www.opentosca.org/bpel/chef4bpel" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:element name="Chef4BPELScript" type="tns:tChef4BPELScript"/>
+
+	<xs:complexType name="tChef4BPELScript">
+		<xs:attribute name="Address" type="xs:string" />
+		<xs:attribute name="SSHUser" type="xs:string" />
+		<xs:attribute name="SSHPrivateKey" type="xs:string" />
+		<xs:attribute name="MetaData" type="xs:string" />
+	</xs:complexType>
+	
+</xs:schema>

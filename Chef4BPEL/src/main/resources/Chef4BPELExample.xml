@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:Chef4BPELScript Address="" MetaData="" SSHPrivateKey="" SSHUser="" xmlns:tns="http://www.opentosca.org/bpel/chef4bpel">
+	<!-- Chef und so.. -->
+	<!-- würde hier auch sowas reinmachen: 
+	
+	<![CDATA[ .. ]]>
+	
+	, damit die symbole < & keine probs machen in den scripten
+	 -->
+</tns:Chef4BPELScript>
