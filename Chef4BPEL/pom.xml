@@ -13,29 +13,6 @@
 		<jdk.version>1.6</jdk.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-
-	<!-- <repositories> <repository> <id>jboss-public</id> <name>JBoss Public 
-		Repository</name> <url>http://repository.jboss.com/maven2</url> </repository> 
-		<repository> <id>mvn-public</id> <name>MVNRepository</name> <url>http://mvnrepository.com</url> 
-		</repository> <repository> <id>mvn-repo-public</id> <name>MVNRepository 2</name> 
-		<url>http://repo1.maven.org</url> </repository> <repository> <id>servicemix-repo</id> 
-		<name>ServiceMix Repository</name> <url>https://repository.apache.org/content/groups/public</url> 
-		<releases> <enabled>true</enabled> </releases> <snapshots> <enabled>false</enabled> 
-		</snapshots> </repository> -->
-	<!-- <repository> <id>saxon-repo</id> <name>Saxon Repo</name> <url>http://people.apache.org/~rr/saxon-repo</url> 
-		<releases> <enabled>true</enabled> </releases> <snapshots> <enabled>false</enabled> 
-		</snapshots> </repository> <repository> <id>central</id> <name>Apache Maven 
-		Repo</name> <url>http://repo1.maven.org/maven2/</url> </repository> <repository> 
-		<id>jboss-public-repository-group</id> <name>JBoss Public Maven Repository 
-		Group</name> <url>http://repository.jboss.org/nexus/content/groups/public/</url> 
-		</repository> <repository> <id>objectweb</id> <name>Objectweb repository</name> 
-		<url>http://maven.objectweb.org/maven2</url> <releases> <enabled>true</enabled> 
-		</releases> <snapshots> <enabled>false</enabled> </snapshots> </repository> 
-		<repository> <id>jboss</id> <name>JBoss Maven2 repository</name> <url>http://repository.jboss.com/maven2/</url> 
-		<snapshots> <enabled>false</enabled> </snapshots> <releases> <enabled>true</enabled> 
-		</releases> </repository> </repositories> -->
-
-
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.ode</groupId>
@@ -44,8 +21,6 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/src/main/resources/libs/ode-bpel-runtime-1.3.5-wso2v4.jar</systemPath>
 		</dependency>
-
-
 
 		<dependency>
 			<groupId>org.apache.ode</groupId>
@@ -63,28 +38,30 @@
 			<systemPath>${project.basedir}/src/main/resources/libs/ode-bpel-api-1.3.5-wso2v4.jar</systemPath>
 		</dependency>
 
-		<!-- <dependency> <groupId>net.sf.json-lib</groupId> <artifactId>json-lib</artifactId> 
-			<version>2.4</version> <classifier>jdk15</classifier>  <scope>system</scope> 
-			<systemPath>${project.basedir}/src/main/resources/libs/json-lib-2.4-jdk15.jar</systemPath>
-		</dependency> <dependency> <groupId>xom</groupId> <artifactId>xom</artifactId> 
-			<version>1.0</version> </dependency> -->
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+		</dependency>
 
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+			<version>9.3.0.M1</version>
+		</dependency>
 
-		<!-- <dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20141113</version>
-		</dependency> -->
-
-
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 
 	<build>
 		<finalName>chef4bpel.${project.version}</finalName>
 		<plugins>
-
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-eclipse-plugin</artifactId>
@@ -94,8 +71,6 @@
 					<downloadJavadocs>true</downloadJavadocs>
 				</configuration>
 			</plugin>
-
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -106,8 +81,6 @@
 				</configuration>
 			</plugin>
 
-
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -116,8 +89,6 @@
 					<excludes>
 						<exclude>**/Chef4BPELSchema.xsd</exclude>
 						<exclude>**/Chef4BPELExample.xml</exclude>
-						<!-- <exclude>**/ode-bpel-runtime-1.3.5-wso2v4.jar</exclude> <exclude>**/ode-bpel-obj-1.3.5-wso2v4.jar</exclude> 
-							<exclude>**/ode-bpel-api-1.3.5-wso2v4.jar</exclude> -->
 					</excludes>
 					<archive>
 						<manifest>
@@ -131,13 +102,6 @@
 					</archive>
 				</configuration>
 			</plugin>
-
-			<!-- <plugin> <groupId>org.dstovall</groupId> <artifactId>onejar-maven-plugin</artifactId> 
-				<version>1.4.4</version> <executions> <execution> <configuration> <onejarVersion>0.97</onejarVersion> 
-				<binlibs> <fileSet> <directory>${project.build.directory}/libs</directory> 
-				<includes> <include>test.dll</include> </includes> </fileSet> </binlibs> 
-				<attachToBuild>false</attachToBuild> <classifier></classifier> </configuration> 
-				<goals> <goal>one-jar</goal> </goals> </execution> </executions> </plugin> -->
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -161,38 +125,7 @@
 				</executions>
 			</plugin>
 
-			<!-- <plugin> <artifactId>maven-assembly-plugin</artifactId> <executions> 
-				<execution> <phase>package</phase> <goals> <goal>single</goal> </goals> </execution> 
-				</executions> <configuration> <descriptorRefs> <descriptorRef>jar-with-dependencies</descriptorRef> 
-				</descriptorRefs> </configuration> </plugin> -->
-			<!-- <plugin> <artifactId>maven-assembly-plugin</artifactId> <version>2.5.2</version> 
-				<executions> <execution> <id>make-assembly</id> <phase>package</phase> <goals> 
-				<goal>single</goal> </goals> </execution> <configuration> <descriptorRefs> 
-				<descriptorRef>jar-with-dependencies</descriptorRef> </descriptorRefs> </configuration> 
-				</executions> </plugin> -->
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.3</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<finalName>uber-${project.artifactId}-${project.version}</finalName>
-				</configuration>
-			</plugin>
-
-			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-fatjar-plugin</artifactId> 
-				<version>1.0.0</version> <executions> <execution> <id>fatjar</id> <phase>package</phase> 
-				<goals> <goal>fatjar</goal> </goals> </execution> </executions> <configuration> 
-				<classpathPrefix>lib</classpathPrefix> <deployDirectory>${deployDir}</deployDirectory> 
-				</configuration> </plugin> -->
 
 		</plugins>
 	</build>

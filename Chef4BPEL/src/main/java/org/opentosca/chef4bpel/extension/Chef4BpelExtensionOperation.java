@@ -5,6 +5,8 @@ import org.apache.ode.bpel.runtime.extension.AbstractSyncExtensionOperation;
 import org.apache.ode.bpel.runtime.extension.ExtensionContext;
 import org.json.JSONObject;
 import org.json.XML;
+import org.opentosca.bpel4restlight.rest.HighLevelRestApi;
+import org.opentosca.bpel4restlight.rest.HttpResponseMessage;
 import org.w3c.dom.Element;
 
 import de.unistuttgart.iaas.bpel.util.BPELVariableInjectionUtil;
@@ -24,21 +26,17 @@ public class Chef4BpelExtensionOperation extends AbstractSyncExtensionOperation 
 		element = BPELVariableInjectionUtil.replaceExtensionVariables(context, element);
 		
 		String xmlString = BPELVariableInjectionUtil.nodeToString(element);
+		String jsonString = Chef4BpelExtensionUtil.transformToJson(element).toString(4);
 		
 		System.out.println("Chef Script XML:");
 		System.out.println(xmlString);
 
-		// TODO Transformation into JSON good enough?
-		/*XMLSerializer serializer = new XMLSerializer();
-		JSONArray json = (JSONArray) serializer.read(xmlString);*/  
-		JSONObject json = XML.toJSONObject(xmlString);
-		
-		System.out.println("Chef Script JSON:");
-		System.out.println(json.toString());
-		
-
-		// TODO Send to Script Server: we need some kind of address here
+		System.out.println("Chef Script JSON:");		
+		System.out.println(jsonString);
+						
 		// TODO What to do with the response ?
+		HttpResponseMessage responseMessage = HighLevelRestApi.Post("http://localhost/api/v1/invokers/chef-cookbooks/runs", jsonString, "application/json");
+
 	}
 	
 }
