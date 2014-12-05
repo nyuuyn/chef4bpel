@@ -68,10 +68,12 @@
 			</bpel:assign>
 
 			<bpel:extensionActivity>
-				<chef4bpel:Chef4BPELScript Address="asd"
-					MetaData="ASDASD" SSHPrivateKey="ASDASD" SSHUser="ASD"
-					xmlns:chef4bpel="http://www.opentosca.org/bpel/chef4bpel">
-					If you can read SUCCESS  here -> $bpelvar[testVar] , the test was successful.
+				<chef4bpel:Chef4BPELScript address="localhost"
+					dependencies="{ 'mysql': '>= 0.0.0' }" SSHPrivateKey="someKey" SSHUser="ubuntu"
+					xmlns:chef4bpel="http://www.opentosca.org/bpel/chef4bpel" access="ssh" SSHPort="22">
+					<![CDATA[If you can read SUCCESS  here -> $bpelvar[testVar] , the test was successful.
+							 include_recipe \"mysql::server\"\n
+					]]>					
 				</chef4bpel:Chef4BPELScript>
 			</bpel:extensionActivity>
 
