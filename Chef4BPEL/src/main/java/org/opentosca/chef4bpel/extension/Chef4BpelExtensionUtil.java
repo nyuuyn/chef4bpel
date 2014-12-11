@@ -14,14 +14,15 @@ public class Chef4BpelExtensionUtil {
 		 *{
 		 *	"parameters": {
 		 *		"run_list": [ "recipe[embedded]" ],
-		 *		"access": "ssh",
-		 * 		"ssh_port": 22,
-		 *		"ssh_host": "1.2.3.4",
-		 *		"ssh_user": "ubuntu",
-		 *		"ssh_private_key": "......."
+		 *		"invoker_config" :{
+		 *			"access": "ssh",
+		 * 			"ssh_port": 22,
+		 *			"ssh_host": "1.2.3.4",
+		 *			"ssh_user": "ubuntu",
+		 *			"ssh_private_key": "......."
+		 *		}
 		 *	},
 		 *	"executable": {
-		 *		"name": "embedded",
 		 *		"files": [
 		 *			{ "path": "metadata.json", 
 		 *			  "object": { "name": "embedded", "dependencies": { "mysql": ">= 0.0.0" } } 
@@ -34,21 +35,47 @@ public class Chef4BpelExtensionUtil {
 		
 		JSONObject mainJsonObj = new JSONObject();
 		
+		/*
+		 * Generating according to this schema:
+		 *"parameters": {
+		 *		"run_list": [ "recipe[embedded]" ],
+		 *		"invoker_config" :{
+		 *			"access": "ssh",
+		 * 			"ssh_port": 22,
+		 *			"ssh_host": "1.2.3.4",
+		 *			"ssh_user": "ubuntu",
+		 *			"ssh_private_key": "......."
+		 *		}
+		 *	} 
+		 */
+		
 		JSONObject parametersObj = new JSONObject();
-		
-		
+				
 		JSONArray recipeArray = new JSONArray();
-		recipeArray.put("recipe[embedded]");
-		
-		// TODO read values from dom attr
+		recipeArray.put("recipe[embedded]");		
 		parametersObj.put("run_list", recipeArray);
-		parametersObj.put("access", domElement.getAttribute("access"));
-		parametersObj.put("ssh_port", domElement.getAttribute("SSHPort"));
-		parametersObj.put("ssh_host", domElement.getAttribute("address"));
-		parametersObj.put("ssh_user", domElement.getAttribute("SSHUser"));
-		parametersObj.put("ssh_private_key",domElement.getAttribute("SSHPrivateKey"));
+		
+		JSONObject invokerConfigObject = new JSONObject();		
+		invokerConfigObject.put("access", domElement.getAttribute("access"));
+		invokerConfigObject.put("ssh_port", domElement.getAttribute("SSHPort"));
+		invokerConfigObject.put("ssh_host", domElement.getAttribute("address"));
+		invokerConfigObject.put("ssh_user", domElement.getAttribute("SSHUser"));
+		invokerConfigObject.put("ssh_private_key",domElement.getAttribute("SSHPrivateKey"));
+		
+		parametersObj.put("invoker_config", invokerConfigObject);
 		
 		mainJsonObj.put("parameters", parametersObj);
+		
+		/*
+		 *"executable": {
+		 *		"files": [
+		 *			{ "path": "metadata.json", 
+		 *			  "object": { "name": "embedded", "dependencies": { "mysql": ">= 0.0.0" } } 
+		 *			},
+		 *			{ "path": "recipes/default.rb", "text": "include_recipe \"mysql::server\"\n" }
+		 *  		]
+		 *	} 
+		 */
 		
 		JSONObject executableJsonObj = new JSONObject();
 		
@@ -57,15 +84,14 @@ public class Chef4BpelExtensionUtil {
 		/* metadata.json file */
 		JSONObject metadataJsonObj = new JSONObject();
 		metadataJsonObj.put("path", "metadata.json");
+
+		JSONObject objectJson = new JSONObject();				
+		objectJson.put("name", "embedded");
 		// content of dependencies
-		JSONObject objectJson = new JSONObject();
-		objectJson.put("name","embedded");
-		
-		// TODO add declared dependencies
 		JSONObject depsObjectJson = new JSONObject(domElement.getAttribute("dependencies"));
-		//depsObjectJson.put("mysql", ">= 0.0.0");
-		
 		objectJson.put("dependencies", depsObjectJson);
+		
+		metadataJsonObj.put("object", objectJson);
 		
 		JSONObject scriptObject = new JSONObject();
 		scriptObject.put("path", "recipes/default.rb");
@@ -73,9 +99,7 @@ public class Chef4BpelExtensionUtil {
 		
 		filesArray.put(metadataJsonObj);
 		filesArray.put(scriptObject);
-		
-		
-		executableJsonObj.put("name", "embedded");
+				
 		executableJsonObj.put("files", filesArray);
 		
 		mainJsonObj.put("executable", executableJsonObj);

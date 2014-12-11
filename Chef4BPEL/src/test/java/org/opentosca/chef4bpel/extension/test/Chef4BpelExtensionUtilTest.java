@@ -43,7 +43,7 @@ public class Chef4BpelExtensionUtilTest {
 			testDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 			
 			InputSource is = new InputSource();
-			is.setCharacterStream(new StringReader("<chef4bpel:Chef4BPELScript address=\"localhost\" dependencies=\"{ 'mysql': '>= 0.0.0' }\" SSHPrivateKey=\"someKey\" SSHUser=\"ubuntu\" xmlns:chef4bpel=\"http://www.opentosca.org/bpel/chef4bpel\" access=\"ssh\" SSHPort=\"22\"><![CDATA[If you can read SUCCESS  here -> $bpelvar[testVar] , the test was successful.include_recipe \"mysql::server\"\n]]></chef4bpel:Chef4BPELScript>"));
+			is.setCharacterStream(new StringReader("<chef4bpel:Chef4BPELScript address=\"localhost\" dependencies=\"{ 'mysql': '>= 0.0.0' }\" SSHPrivateKey=\"someKey\" SSHUser=\"ubuntu\" xmlns:chef4bpel=\"http://www.opentosca.org/bpel/chef4bpel\" access=\"ssh\" SSHPort=\"22\"><![CDATA[include_recipe \"mysql::server\"\n]]></chef4bpel:Chef4BPELScript>"));
 			testDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
 			
 		} catch (ParserConfigurationException e) {
