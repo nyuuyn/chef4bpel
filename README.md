@@ -21,7 +21,7 @@ Run:
 ```
 Chef4BPEL Test Process:
 ========
-- Deploy the provided .zip file under build/ unto you WSO2 BPS
+- Deploy the provided .zip file under builds/ unto your WSO2 BPS
 - Test with TryIt or some other soap tool
 
 Tested with Java 1.6 and WSO2 BPS 2.1.2
