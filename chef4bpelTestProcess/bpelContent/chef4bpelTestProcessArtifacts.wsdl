@@ -21,7 +21,9 @@
             <element name="chef4bpelTestProcessRequest">
                 <complexType>
                     <sequence>
-                        <element name="input" type="string"/>
+                        <element name="SSHKey" type="string"/>
+                        <element name="SSHUser" type="string"/>
+                        <element name="TestServer" type="string"/>
                     </sequence>
                 </complexType>
             </element>
