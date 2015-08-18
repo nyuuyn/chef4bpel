@@ -61,7 +61,7 @@ public class ContainerAPIClient {
 		String serviceInstanceResourceUrl = getServiceInstance(url, serviceTemplateId);
 
 		HttpResponseMessage serviceInstanceResourceResponse = HighLevelRestApi.Get(serviceInstanceResourceUrl,
-				"application/xml");
+				"text/xml");
 
 		InputSource source = new InputSource(new StringReader(serviceInstanceResourceResponse.getResponseBody()));
 		XPath serviceInstanceResourceXpath = xpathFactory.newXPath();
@@ -84,7 +84,7 @@ public class ContainerAPIClient {
 		}
 
 		for (String nodeInstanceUrl : nodeInstanceUrls) {
-			HttpResponseMessage nodeInstanceResourceResponse = HighLevelRestApi.Get(nodeInstanceUrl, "application/xml");
+			HttpResponseMessage nodeInstanceResourceResponse = HighLevelRestApi.Get(nodeInstanceUrl, "text/xml");
 
 			source = new InputSource(new StringReader(nodeInstanceResourceResponse.getResponseBody()));
 			XPath nodeInstanceXpath = xpathFactory.newXPath();
@@ -99,7 +99,7 @@ public class ContainerAPIClient {
 							? nodeInstanceUrl + "Properties" : nodeInstanceUrl + "/Properties";
 
 					HttpResponseMessage nodeInstancePropertiesResourceResponse = HighLevelRestApi
-							.Get(nodeInstancePropertiesResourceUrl, "application/xml");
+							.Get(nodeInstancePropertiesResourceUrl, "text/xml");
 
 					source = new InputSource(new StringReader(nodeInstanceResourceResponse.getResponseBody()));
 					XPath nodeInstancePropertiesResourceXpath = xpathFactory.newXPath();
@@ -128,7 +128,7 @@ public class ContainerAPIClient {
 		String serviceInstancesResourceUrl = (url.endsWith("/")) ? url + "serviceInstances" : url + "/serviceInstances";
 
 		HttpResponseMessage serviceInstancesResourceResponse = HighLevelRestApi.Get(serviceInstancesResourceUrl,
-				"application/xml");
+				"text/xml");
 
 		InputSource source = new InputSource(new StringReader(serviceInstancesResourceResponse.getResponseBody()));
 		XPath serviceInstancesXpath = xpathFactory.newXPath();
@@ -150,7 +150,7 @@ public class ContainerAPIClient {
 
 		for (String serviceInstanceUrl : serviceInstanceUrls) {
 			HttpResponseMessage serviceInstanceResourceResponse = HighLevelRestApi.Get(serviceInstanceUrl,
-					"application/xml");
+					"text/xml");
 
 			source = new InputSource(new StringReader(serviceInstanceResourceResponse.getResponseBody()));
 			XPath serviceInstanceXpath = xpathFactory.newXPath();
@@ -266,7 +266,7 @@ public class ContainerAPIClient {
 		
 		String csarsResourceUrl = (url.endsWith("/")) ? url + "CSARs" : url + "/CSARs";
 
-		HttpResponseMessage csarsResourceResponse = HighLevelRestApi.Get(csarsResourceUrl, "application/xml");
+		HttpResponseMessage csarsResourceResponse = HighLevelRestApi.Get(csarsResourceUrl, "text/xml");
 
 		InputSource source = new InputSource(new StringReader(csarsResourceResponse.getResponseBody()));
 		XPath csarsResourceResponseXpath = xpathFactory.newXPath();
