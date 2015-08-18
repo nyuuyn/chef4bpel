@@ -110,14 +110,14 @@ public class ToscaPropertyInjectionUtil {
 				String variableName = chef4bpel.substring(startIndex + 15, endIndex);
 
 				String propertyValue = null;
-				switch (variableName.split(".").length) {
+				switch (variableName.split("\\.").length) {
 				case 2:
 					propertyValue = ContainerAPIClient.getProperty(instanceDataAPIURL, variableName.split(".")[0],
-							variableName.split(".")[1]);
+							variableName.split("\\.")[1]);
 					break;
 				case 3:
 					propertyValue = ContainerAPIClient.getProperty(instanceDataAPIURL, variableName.split(".")[0],
-							variableName.split(".")[1], variableName.split(".")[2]);
+							variableName.split("\\.")[1], variableName.split(".")[2]);
 					break;
 				default:
 					System.out.println("TOSCAProperty Key is malformed!");
@@ -158,14 +158,14 @@ public class ToscaPropertyInjectionUtil {
 				String variableName = chef4bpel.substring(startIndex + 15, endIndex);
 
 				String propertyValue = null;
-				switch (variableName.split(".").length) {
+				switch (variableName.split("\\.").length) {
 				case 2:
 					propertyValue = ContainerAPIClient.getProperty(containerAPIUrl, variableName.split(".")[0],
-							variableName.split(".")[1]);
+							variableName.split("\\.")[1]);
 					break;
 				case 3:
 					propertyValue = ContainerAPIClient.getProperty(containerAPIUrl, variableName.split(".")[0],
-							variableName.split(".")[1], variableName.split(".")[2]);
+							variableName.split("\\.")[1], variableName.split(".")[2]);
 					break;
 				default:
 					System.out.println("TOSCAProperty Key is malformed!");
