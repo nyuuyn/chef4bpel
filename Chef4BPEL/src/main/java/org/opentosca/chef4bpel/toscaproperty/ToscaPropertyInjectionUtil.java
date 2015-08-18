@@ -107,7 +107,7 @@ public class ToscaPropertyInjectionUtil {
 				}
 
 				// Extract name of referenced variable
-				String variableName = chef4bpel.substring(startIndex + 9, endIndex);
+				String variableName = chef4bpel.substring(startIndex + 15, endIndex);
 
 				String propertyValue = null;
 				switch (variableName.split(".").length) {
@@ -155,7 +155,7 @@ public class ToscaPropertyInjectionUtil {
 				}
 
 				// Extract name of referenced variable
-				String variableName = chef4bpel.substring(startIndex + 9, endIndex);
+				String variableName = chef4bpel.substring(startIndex + 15, endIndex);
 
 				String propertyValue = null;
 				switch (variableName.split(".").length) {
