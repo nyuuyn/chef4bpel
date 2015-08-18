@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import org.json.XML;
 import org.opentosca.bpel4restlight.rest.HighLevelRestApi;
 import org.opentosca.bpel4restlight.rest.HttpResponseMessage;
+import org.opentosca.chef4bpel.toscaproperty.ToscaPropertyInjectionUtil;
 import org.w3c.dom.Element;
 
 import de.unistuttgart.iaas.bpel.util.BPELVariableInjectionUtil;
@@ -25,27 +26,38 @@ import de.unistuttgart.iaas.bpel.util.BPELVariableInjectionUtil;
  */
 public class Chef4BpelExtensionOperation extends AbstractSyncExtensionOperation {
 	
-	private Properties configuration = null;
-	
-	
-	@Override
-	protected void runSync(ExtensionContext context, Element element) throws FaultException {
+	private static Properties configuration = null;
+
+	public Chef4BpelExtensionOperation() {
 		try {
 			this.loadConfiguartion();
 		} catch (IOException e) {
 			System.err.println("Couldn't load configuration file");
 			e.printStackTrace();
 		}
-		
+	}
+	
+	public static Properties getConfiguration(){
+		return Chef4BpelExtensionOperation.configuration;
+	}
+	
+	@Override
+	protected void runSync(ExtensionContext context, Element element) throws FaultException {
 		element = BPELVariableInjectionUtil.replaceExtensionVariables(context, element);
 		
 		String xmlString = BPELVariableInjectionUtil.nodeToString(element);
 		String jsonString = Chef4BpelExtensionUtil.transformToJson(element).toString(4);
 		
+		
 		System.out.println("Chef Script XML:");
 		System.out.println(xmlString);
 		
 		System.out.println("Chef Script JSON:");
+		System.out.println(jsonString);
+		
+		System.out.println("Replacing TOSCAProperty references..");
+		jsonString = ToscaPropertyInjectionUtil.injectToscaProperty(context, jsonString);
+		System.out.println("Replaced TOSCAProperties:");
 		System.out.println(jsonString);
 		
 		// TODO What to do with the response ?
@@ -65,7 +77,7 @@ public class Chef4BpelExtensionOperation extends AbstractSyncExtensionOperation 
 			throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
 		}
 		
-		this.configuration = prop;
+		Chef4BpelExtensionOperation.configuration = prop;
 	}
 	
 }
