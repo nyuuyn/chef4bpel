@@ -27,6 +27,8 @@ public class ContainerAPIClient {
 	private static final XPathFactory xpathFactory = XPathFactory.newInstance();
 
 	public static String getProperty(String url, String entityTemplateId, String propertyName) {
+		System.out.println("Starting to fetch TOSCAProperty " + entityTemplateId + "." + propertyName + " from URL " + url);
+		
 		for (String entryDefUrl : getEntryDefinitions(url)) {
 			for (String serviceTemplateId : getServiceTemplateIdsFromDefinitionsUrl(entryDefUrl)) {
 				String propertyValue = getProperty(url, serviceTemplateId, entityTemplateId, propertyName);
@@ -42,6 +44,7 @@ public class ContainerAPIClient {
 
 	public static String getProperty(String url, String serviceTemplateId, String entityTemplateId,
 			String propertyName) {
+		System.out.println("Starting to fetch TOSCAProperty " + serviceTemplateId + "." + entityTemplateId + "." + propertyName);
 		if (url.contains("containerapi/instancedata")) {
 			return getPropertyInstanceDataAPI(url, serviceTemplateId, entityTemplateId, propertyName);
 		} else if (url.contains("containerapi")) {
@@ -120,6 +123,8 @@ public class ContainerAPIClient {
 	}
 
 	private static String getServiceInstance(String url, String serviceTemplateId) {
+		System.out.println("Fetching serviceInstance for " + serviceTemplateId + " from " + url);
+		
 		String serviceInstancesResourceUrl = (url.endsWith("/")) ? url + "serviceInstances" : url + "/serviceInstances";
 
 		HttpResponseMessage serviceInstancesResourceResponse = HighLevelRestApi.Get(serviceInstancesResourceUrl,
@@ -170,6 +175,8 @@ public class ContainerAPIClient {
 	private static String getPropertyContainerAPI(String url, String serviceTemplateId, String entityTemplateId,
 			String propertyName) {
 
+		System.out.println("Fetching property with containerAPI");
+		
 		List<String> entryDefinitionUrls = getEntryDefinitions(url);
 
 		for (String entryDefinitionUrl : entryDefinitionUrls) {
@@ -226,6 +233,7 @@ public class ContainerAPIClient {
 
 	private static List<String> getServiceTemplateIdsFromDefinitionsUrl(String defUrl) {
 
+		System.out.println("Fetching ServiceTemplateIds from Definitions at " + defUrl);
 		HttpResponseMessage definitionsResourceResponse = HighLevelRestApi.Get(defUrl, "application/octet-stream");
 
 		InputSource source = new InputSource(new StringReader(definitionsResourceResponse.getResponseBody()));
@@ -254,6 +262,8 @@ public class ContainerAPIClient {
 
 	private static List<String> getEntryDefinitions(String url) {
 
+		System.out.println("Fetching entryDefintiions from " + url);
+		
 		String csarsResourceUrl = (url.endsWith("/")) ? url + "CSARs" : url + "/CSARs";
 
 		HttpResponseMessage csarsResourceResponse = HighLevelRestApi.Get(csarsResourceUrl, "application/xml");
