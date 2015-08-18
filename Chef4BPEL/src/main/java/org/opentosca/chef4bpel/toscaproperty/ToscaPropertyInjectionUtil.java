@@ -72,11 +72,15 @@ public class ToscaPropertyInjectionUtil {
 		// if no containerAPI url was determined until now -> use the one in
 		// config.properties
 		if (containerAPIURL == null) {
+			System.out.println("No containerAPI was found in bpelContext, falling back to URL in configuration");
 			containerAPIURL = Chef4BpelExtensionOperation.getConfiguration().getProperty("opentosca.location");
 		}
 
-		// determine Template Mode (No InstanceData available) or Instance Mode
+		System.out.println("InstanceDataAPIUrl: " + instanceDataAPIURL);
+		System.out.println("ServiceInstanceUrl: " + serviceInstanceIDURL);
+		System.out.println("containerAPIUrl: " + containerAPIURL);
 		
+		// determine Template Mode (No InstanceData available) or Instance Mode
 		if(instanceDataAPIURL != null){
 			return ToscaPropertyInjectionUtil.injectToscaPropertiesInstanceDataAPI(bpelContext, chef4bpel,
 					instanceDataAPIURL);
@@ -109,15 +113,16 @@ public class ToscaPropertyInjectionUtil {
 				// Extract name of referenced variable
 				String variableName = chef4bpel.substring(startIndex + 15, endIndex);
 
+				System.out.println("Found following TOSCAProperty reference: " + variableName);
 				String propertyValue = null;
 				switch (variableName.split("\\.").length) {
 				case 2:
-					propertyValue = ContainerAPIClient.getProperty(instanceDataAPIURL, variableName.split(".")[0],
+					propertyValue = ContainerAPIClient.getProperty(instanceDataAPIURL, variableName.split("\\.")[0],
 							variableName.split("\\.")[1]);
 					break;
 				case 3:
-					propertyValue = ContainerAPIClient.getProperty(instanceDataAPIURL, variableName.split(".")[0],
-							variableName.split("\\.")[1], variableName.split(".")[2]);
+					propertyValue = ContainerAPIClient.getProperty(instanceDataAPIURL, variableName.split("\\.")[0],
+							variableName.split("\\.")[1], variableName.split("\\.")[2]);
 					break;
 				default:
 					System.out.println("TOSCAProperty Key is malformed!");
@@ -127,6 +132,8 @@ public class ToscaPropertyInjectionUtil {
 				if (propertyValue != null) {
 					// Replace variable-reference with corresponding content
 					chef4bpel = chef4bpel.replace("$TOSCAProperty[" + variableName + "]", propertyValue);
+				} else{
+					chef4bpel = chef4bpel.replace("$TOSCAProperty["+variableName + "]", "");
 				}
 
 				System.out.println("The full chef4bpel script as string: \n" + chef4bpel + "\n");
@@ -157,15 +164,16 @@ public class ToscaPropertyInjectionUtil {
 				// Extract name of referenced variable
 				String variableName = chef4bpel.substring(startIndex + 15, endIndex);
 
+				System.out.println("Found following TOSCAProperty reference: " + variableName);
 				String propertyValue = null;
 				switch (variableName.split("\\.").length) {
 				case 2:
-					propertyValue = ContainerAPIClient.getProperty(containerAPIUrl, variableName.split(".")[0],
+					propertyValue = ContainerAPIClient.getProperty(containerAPIUrl, variableName.split("\\.")[0],
 							variableName.split("\\.")[1]);
 					break;
 				case 3:
-					propertyValue = ContainerAPIClient.getProperty(containerAPIUrl, variableName.split(".")[0],
-							variableName.split("\\.")[1], variableName.split(".")[2]);
+					propertyValue = ContainerAPIClient.getProperty(containerAPIUrl, variableName.split("\\.")[0],
+							variableName.split("\\.")[1], variableName.split("\\.")[2]);
 					break;
 				default:
 					System.out.println("TOSCAProperty Key is malformed!");
@@ -175,6 +183,8 @@ public class ToscaPropertyInjectionUtil {
 				if (propertyValue != null) {
 					// Replace variable-reference with corresponding content
 					chef4bpel = chef4bpel.replace("$TOSCAProperty[" + variableName + "]", propertyValue);
+				} else{
+					chef4bpel = chef4bpel.replace("$TOSCAProperty["+variableName + "]", "");
 				}
 
 				System.out.println("The full chef4bpel script as string: \n" + chef4bpel + "\n");
