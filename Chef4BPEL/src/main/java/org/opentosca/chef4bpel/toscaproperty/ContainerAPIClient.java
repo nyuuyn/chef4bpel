@@ -103,27 +103,36 @@ public class ContainerAPIClient {
 
 			try {
 				NodeList nodeInstance = (NodeList) nodeInstanceXpath.evaluate(
-						"/*[local-name()='NodeInstance' and @nodeTemplateID='" + entityTemplateId + "']", source,
+						"/*[local-name()='NodeInstance']", source,
 						XPathConstants.NODESET);
 
-				if (nodeInstance.getLength() == 1) {
-					String nodeInstancePropertiesResourceUrl = (nodeInstanceUrl.endsWith("/"))
-							? nodeInstanceUrl + "Properties" : nodeInstanceUrl + "/Properties";
-
-					HttpResponseMessage nodeInstancePropertiesResourceResponse = HighLevelRestApi
-							.Get(nodeInstancePropertiesResourceUrl, "application/xml");
-
-					source = new InputSource(new StringReader(nodeInstanceResourceResponse.getResponseBody()));
-					XPath nodeInstancePropertiesResourceXpath = xpathFactory.newXPath();
-
-					NodeList nodeInstanceProperty = (NodeList) nodeInstancePropertiesResourceXpath
-							.evaluate("/*/*[local-name()='" + propertyName + "']", source, XPathConstants.NODESET);
-
-					if (nodeInstanceProperty.getLength() == 1) {
-						return ((Element)nodeInstanceProperty.item(0)).getTextContent();
+				
+				for(int nodeInstancesIndex = 0 ; nodeInstancesIndex < nodeInstance.getLength(); nodeInstancesIndex++){
+					Element nodeInstanceElement = (Element)nodeInstance.item(nodeInstancesIndex);
+					if(nodeInstanceElement.getAttribute("nodeTemplateID").split("\\}")[1].equals(entityTemplateId)){
+						
+						String nodeInstancePropertiesResourceUrl = (nodeInstanceUrl.endsWith("/"))
+								? nodeInstanceUrl + "Properties" : nodeInstanceUrl + "/Properties";
+						
+						HttpResponseMessage nodeInstancePropertiesResourceResponse = HighLevelRestApi
+								.Get(nodeInstancePropertiesResourceUrl, "application/xml");
+						
+						source = new InputSource(new StringReader(nodeInstancePropertiesResourceResponse.getResponseBody()));
+						XPath nodeInstancePropertiesResourceXpath = xpathFactory.newXPath();
+						
+						NodeList nodeInstanceProperty = (NodeList) nodeInstancePropertiesResourceXpath
+								.evaluate("/*/*[local-name()='" + propertyName + "']", source, XPathConstants.NODESET);
+						
+						if (nodeInstanceProperty.getLength() == 1) {
+							return ((Element)nodeInstanceProperty.item(0)).getTextContent();
+						}
 					}
-
+					
 				}
+				
+				
+				
+
 			} catch (XPathExpressionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
