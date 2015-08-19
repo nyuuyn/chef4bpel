@@ -112,7 +112,7 @@ public class ContainerAPIClient {
 					if(nodeInstanceElement.getAttribute("nodeTemplateID").split("\\}")[1].equals(entityTemplateId)){
 						
 						String nodeInstancePropertiesResourceUrl = (nodeInstanceUrl.endsWith("/"))
-								? nodeInstanceUrl + "Properties" : nodeInstanceUrl + "/Properties";
+								? nodeInstanceUrl + "properties" : nodeInstanceUrl + "/properties";
 						
 						HttpResponseMessage nodeInstancePropertiesResourceResponse = HighLevelRestApi
 								.Get(nodeInstancePropertiesResourceUrl, "application/xml");
