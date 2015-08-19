@@ -81,22 +81,26 @@ public class ToscaPropertyInjectionUtil {
 		System.out.println("containerAPIUrl: " + containerAPIURL);
 		
 		// determine Template Mode (No InstanceData available) or Instance Mode
+		if(serviceInstanceIDURL != null){
+			System.out.println("Using ServiceInstanceURL " + serviceInstanceIDURL);
+			return ToscaPropertyInjectionUtil.injectToscaPropertiesInstanceDataAPI(bpelContext, chef4bpel, getInstanceDataAPIURL(serviceInstanceIDURL));
+		}
+
 		if(instanceDataAPIURL != null){
+			System.out.println("Using instanceDataAPI " + instanceDataAPIURL);
 			return ToscaPropertyInjectionUtil.injectToscaPropertiesInstanceDataAPI(bpelContext, chef4bpel,
 					instanceDataAPIURL);
 		}
-
-		if(serviceInstanceIDURL != null){
-			return ToscaPropertyInjectionUtil.injectToscaPropertiesInstanceDataAPI(bpelContext, chef4bpel, getInstanceDataAPIURL(serviceInstanceIDURL));
-		}
 		
 		if(containerAPIURL != null){
+			System.out.println("Using containerAPI " + containerAPIURL);
 			return ToscaPropertyInjectionUtil.injectToscaPropertiesContainerAPI(bpelContext, chef4bpel, containerAPIURL);
 		}
 
 		return null;
 	}
 
+	
 	private static String injectToscaPropertiesInstanceDataAPI(ExtensionContext bpelContext, String chef4bpel,
 			String instanceDataAPIURL) {
 

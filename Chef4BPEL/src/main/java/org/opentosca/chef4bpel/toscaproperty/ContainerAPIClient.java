@@ -62,9 +62,13 @@ public class ContainerAPIClient {
 
 	private static String getPropertyInstanceDataAPI(String url, String serviceTemplateId, String entityTemplateId,
 			String propertyName) {
-
-		String serviceInstanceResourceUrl = getServiceInstance(url, serviceTemplateId);
-
+		String serviceInstanceResourceUrl  = null;
+		if(!url.contains("serviceInstance")){
+			// load from instanceDataAPI
+			serviceInstanceResourceUrl = getServiceInstance(url, serviceTemplateId);
+		}else {
+			serviceInstanceResourceUrl = url;
+		}
 		HttpResponseMessage serviceInstanceResourceResponse = HighLevelRestApi.Get(serviceInstanceResourceUrl,
 				"text/xml");
 
@@ -281,12 +285,31 @@ public class ContainerAPIClient {
 
 		return serviceTemplateIds;
 	}
+	
+	private static String getContainerAPIURL(String instanceDataAPIUrl){
+		if(instanceDataAPIUrl.contains("containerapi")){
+			return instanceDataAPIUrl.split("containerapi")[0] + "containerapi";
+		} else{
+			return null;
+		}
+	}
 
 	private static List<String> getEntryDefinitions(String url) {
 
-		System.out.println("Fetching entryDefinitions from " + url);
+		String containerApiUrl = null;
+		if(url.contains("instancedata")){
+			// fetch containerapiurl
+			if(getContainerAPIURL(url)!= null){
+				containerApiUrl = getContainerAPIURL(url);
+			}
+		}else {
+			containerApiUrl = url;
+		}
+		
+		
+		System.out.println("Fetching entryDefinitions from " + containerApiUrl);
 
-		String csarsResourceUrl = (url.endsWith("/")) ? url + "CSARs" : url + "/CSARs";
+		String csarsResourceUrl = (containerApiUrl.endsWith("/")) ? containerApiUrl + "CSARs" : containerApiUrl + "/CSARs";
 
 		HttpResponseMessage csarsResourceResponse = HighLevelRestApi.Get(csarsResourceUrl, "text/xml");
 
