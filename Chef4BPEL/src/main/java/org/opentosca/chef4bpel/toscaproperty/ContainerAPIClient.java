@@ -15,6 +15,7 @@ import javax.xml.xpath.XPathFactory;
 
 import org.opentosca.bpel4restlight.rest.HighLevelRestApi;
 import org.opentosca.bpel4restlight.rest.HttpResponseMessage;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -76,8 +77,7 @@ public class ContainerAPIClient {
 					source, XPathConstants.NODESET);
 
 			for (int nodeInstancesIndex = 0; nodeInstancesIndex < nodeInstancesList.getLength(); nodeInstancesIndex++) {
-				nodeInstanceUrls.add(nodeInstancesList.item(nodeInstancesIndex).getAttributes().getNamedItem("href")
-						.getTextContent());
+				nodeInstanceUrls.add(((Element)nodeInstancesList.item(nodeInstancesIndex)).getAttributeNS(Constants.xLinkNS,"href"));
 			}
 
 		} catch (XPathExpressionException e) {
@@ -143,7 +143,7 @@ public class ContainerAPIClient {
 
 			for (int index = 0; index < serviceInstancesList.getLength(); index++) {
 				serviceInstanceUrls
-						.add(serviceInstancesList.item(index).getAttributes().getNamedItem("href").getTextContent());
+						.add(((Element)serviceInstancesList.item(index)).getAttributeNS(Constants.xLinkNS,"href"));
 			}
 		} catch (XPathExpressionException e) {
 			// TODO Auto-generated catch block
@@ -250,8 +250,10 @@ public class ContainerAPIClient {
 
 			for (int index = 0; index < serviceTemplateList.getLength(); index++) {
 				Node serviceTemplate = serviceTemplateList.item(index);
+				
+				Element serviceTemplateElement = (Element) serviceTemplate;
 
-				serviceTemplateIds.add(serviceTemplate.getAttributes().getNamedItem("id").getTextContent());
+				serviceTemplateIds.add(serviceTemplateElement.getAttribute("id"));
 			}
 
 		} catch (XPathExpressionException e) {
@@ -285,9 +287,11 @@ public class ContainerAPIClient {
 				System.out.println("Found reference: ");
 				System.out.println(BPELVariableInjectionUtil.nodeToString(reference));
 				
+				Element refElement = (Element) reference;
 				
-				if (reference.hasAttributes() && !reference.getAttributes().getNamedItem("title").getNodeValue().equals("Self")) {
-					csarUrls.add(reference.getAttributes().getNamedItem("href").getNodeValue());
+				
+				if (refElement.hasAttributeNS(Constants.xLinkNS,"title") & refElement.hasAttributeNS(Constants.xLinkNS, "href")& !refElement.getAttributeNS(Constants.xLinkNS,"title").equals("Self")) {
+					csarUrls.add(refElement.getAttributeNS(Constants.xLinkNS, "href"));
 				}
 			}
 
