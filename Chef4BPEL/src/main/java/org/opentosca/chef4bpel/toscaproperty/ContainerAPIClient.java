@@ -257,7 +257,7 @@ public class ContainerAPIClient {
 
 		try {
 			NodeList serviceTemplateList = (NodeList) definitionsResourceXpath.evaluate(
-					"/*[local-name='Definitions']/*[local-name()='ServiceTemplate']", source, XPathConstants.NODESET);
+					"/*[local-name()='Definitions']/*[local-name()='ServiceTemplate']", source, XPathConstants.NODESET);
 
 			System.out.println("Found " + serviceTemplateList.getLength() + " ServiceTemplates in Definitions at " + defUrl);
 			for (int index = 0; index < serviceTemplateList.getLength(); index++) {
