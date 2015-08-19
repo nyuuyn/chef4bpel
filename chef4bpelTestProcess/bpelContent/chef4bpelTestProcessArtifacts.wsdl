@@ -24,6 +24,8 @@
                         <element name="SSHKey" type="string"/>
                         <element name="SSHUser" type="string"/>
                         <element name="TestServer" type="string"/>
+                        <element name="instanceDataAPIUrl" type="string"/>
+                        <element name="OpenTOSCAContainerAPIServiceInstanceID" type="string"/>
                     </sequence>
                 </complexType>
             </element>

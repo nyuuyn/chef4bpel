@@ -45,6 +45,8 @@
 		<bpel:variable name="SSHPrivateKey" type="xs:string"></bpel:variable>
 		<bpel:variable name="SSHUser" type="xs:string"></bpel:variable>
 		<bpel:variable name="TestServer" type="xs:string"></bpel:variable>
+		<bpel:variable name="instanceDataAPIUrl" type="xs:string"/>
+		<bpel:variable name="OpenTOSCAContainerAPIServiceInstanceID" type="xs:string"/>
 	</bpel:variables>
 
 	<!-- ================================================================= -->
@@ -76,9 +78,15 @@
                 </bpel:copy>
                 <bpel:copy>
                     <bpel:from part="payload" variable="input">
-                        <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[tns:SSHUser]]></bpel:query>
+                        <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[tns:instanceDataAPIUrl]]></bpel:query>
                     </bpel:from>
-                    <bpel:to variable="SSHUser"></bpel:to>
+                    <bpel:to variable="instanceDataAPIUrl"></bpel:to>
+                </bpel:copy>
+                <bpel:copy>
+                    <bpel:from part="payload" variable="input">
+                        <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[tns:OpenTOSCAContainerAPIServiceInstanceID]]></bpel:query>
+                    </bpel:from>
+                    <bpel:to variable="OpenTOSCAContainerAPIServiceInstanceID"></bpel:to>
                 </bpel:copy>
                 <bpel:copy>
                     <bpel:from part="payload" variable="input">
@@ -94,6 +102,10 @@
 					xmlns:chef4bpel="http://www.opentosca.org/bpel/chef4bpel" access="ssh" SSHPort="22">
 					<![CDATA[=begin If you can read SUCCESS  here -> $bpelvar[testVar] , the test was successful. =end
 							 include_recipe \"mysql::server\"\n
+							 package 'apache_httpd' do \n
+							 	http_port $TOSCAProperty[ApacheWebServer.httpdport]\n
+							 	ensure 'installed' \n
+							 end
 					]]>					
 				</chef4bpel:Chef4BPELScript>
 			</bpel:extensionActivity>
