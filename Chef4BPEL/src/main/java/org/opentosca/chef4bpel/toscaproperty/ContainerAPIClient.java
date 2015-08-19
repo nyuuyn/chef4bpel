@@ -318,7 +318,10 @@ public class ContainerAPIClient {
 				String line = reader.readLine();
 				while (line != null) {
 					if (line.contains("Entry-Definitions:")) {
+						System.out.println("Found Entry-Definitions");
 						entryDefinitionsPath = line.split(":")[1].trim();
+						System.out.println(entryDefinitionsPath);
+						break;
 					} else {
 						line = reader.readLine();
 					}
