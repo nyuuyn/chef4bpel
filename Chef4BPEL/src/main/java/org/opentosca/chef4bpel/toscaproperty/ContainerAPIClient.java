@@ -70,7 +70,7 @@ public class ContainerAPIClient {
 			serviceInstanceResourceUrl = url;
 		}
 		HttpResponseMessage serviceInstanceResourceResponse = HighLevelRestApi.Get(serviceInstanceResourceUrl,
-				"text/xml");
+				"application/xml");
 
 		InputSource source = new InputSource(new StringReader(serviceInstanceResourceResponse.getResponseBody()));
 		XPath serviceInstanceResourceXpath = xpathFactory.newXPath();
@@ -93,7 +93,7 @@ public class ContainerAPIClient {
 		}
 
 		for (String nodeInstanceUrl : nodeInstanceUrls) {
-			HttpResponseMessage nodeInstanceResourceResponse = HighLevelRestApi.Get(nodeInstanceUrl, "text/xml");
+			HttpResponseMessage nodeInstanceResourceResponse = HighLevelRestApi.Get(nodeInstanceUrl, "application/xml");
 
 			source = new InputSource(new StringReader(nodeInstanceResourceResponse.getResponseBody()));
 			XPath nodeInstanceXpath = xpathFactory.newXPath();
@@ -108,7 +108,7 @@ public class ContainerAPIClient {
 							? nodeInstanceUrl + "Properties" : nodeInstanceUrl + "/Properties";
 
 					HttpResponseMessage nodeInstancePropertiesResourceResponse = HighLevelRestApi
-							.Get(nodeInstancePropertiesResourceUrl, "text/xml");
+							.Get(nodeInstancePropertiesResourceUrl, "application/xml");
 
 					source = new InputSource(new StringReader(nodeInstanceResourceResponse.getResponseBody()));
 					XPath nodeInstancePropertiesResourceXpath = xpathFactory.newXPath();
@@ -117,7 +117,7 @@ public class ContainerAPIClient {
 							.evaluate("/*/*[local-name()='" + propertyName + "']", source, XPathConstants.NODESET);
 
 					if (nodeInstanceProperty.getLength() == 1) {
-						return nodeInstanceProperty.item(0).getTextContent();
+						return ((Element)nodeInstanceProperty.item(0)).getTextContent();
 					}
 
 				}
@@ -137,7 +137,7 @@ public class ContainerAPIClient {
 		String serviceInstancesResourceUrl = (url.endsWith("/")) ? url + "serviceInstances" : url + "/serviceInstances";
 
 		HttpResponseMessage serviceInstancesResourceResponse = HighLevelRestApi.Get(serviceInstancesResourceUrl,
-				"text/xml");
+				"application/xml");
 
 		InputSource source = new InputSource(new StringReader(serviceInstancesResourceResponse.getResponseBody()));
 		XPath serviceInstancesXpath = xpathFactory.newXPath();
@@ -158,14 +158,14 @@ public class ContainerAPIClient {
 		}
 
 		for (String serviceInstanceUrl : serviceInstanceUrls) {
-			HttpResponseMessage serviceInstanceResourceResponse = HighLevelRestApi.Get(serviceInstanceUrl, "text/xml");
+			HttpResponseMessage serviceInstanceResourceResponse = HighLevelRestApi.Get(serviceInstanceUrl, "application/xml");
 
 			source = new InputSource(new StringReader(serviceInstanceResourceResponse.getResponseBody()));
 			XPath serviceInstanceXpath = xpathFactory.newXPath();
 
 			try {
 				NodeList serviceInstance = (NodeList) serviceInstanceXpath.evaluate(
-						"/*[local-name='ServiceInstance' and @serviceTemplateID='" + serviceTemplateId + "']", source,
+						"/*[local-name()='ServiceInstance' and @serviceTemplateID='" + serviceTemplateId + "']", source,
 						XPathConstants.NODESET);
 
 				if (serviceInstance.getLength() == 1) {
