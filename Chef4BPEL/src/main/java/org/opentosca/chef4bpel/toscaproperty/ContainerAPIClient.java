@@ -19,6 +19,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import de.unistuttgart.iaas.bpel.util.BPELVariableInjectionUtil;
+
 /**
  * @author kepeskn
  *
@@ -280,8 +282,12 @@ public class ContainerAPIClient {
 
 			for (int index = 0; index < referencesList.getLength(); index++) {
 				Node reference = referencesList.item(index);
-				if (!reference.getAttributes().getNamedItem("title").getTextContent().equals("Self")) {
-					csarUrls.add(reference.getAttributes().getNamedItem("href").getTextContent());
+				System.out.println("Found reference: ");
+				System.out.println(BPELVariableInjectionUtil.nodeToString(reference));
+				
+				
+				if (reference.hasAttributes() && !reference.getAttributes().getNamedItem("title").getNodeValue().equals("Self")) {
+					csarUrls.add(reference.getAttributes().getNamedItem("href").getNodeValue());
 				}
 			}
 
