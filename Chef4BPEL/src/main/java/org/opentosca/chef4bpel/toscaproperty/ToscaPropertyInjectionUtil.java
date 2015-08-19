@@ -1,6 +1,8 @@
 package org.opentosca.chef4bpel.toscaproperty;
 
 import java.io.StringReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
 
 import javax.activation.MailcapCommandMap;
@@ -42,11 +44,11 @@ public class ToscaPropertyInjectionUtil {
 				// instanceDataAPIUrl, OpenTOSCAContainerAPIServiceInstanceID
 
 				if (bpelVarName.contains(Constants.InstanceDataAPIURLVarName)) {
-					instanceDataAPIURL = BPELVariableInjectionUtil
-							.nodeToString(bpelContext.readVariable(visibleVariables.get(bpelVarName)));
+					instanceDataAPIURL = checkUrl(BPELVariableInjectionUtil
+							.nodeToString(bpelContext.readVariable(visibleVariables.get(bpelVarName))));
 				} else if (bpelVarName.contains(Constants.ServiceInstanceURLVarName)) {
-					serviceInstanceIDURL = BPELVariableInjectionUtil
-							.nodeToString(bpelContext.readVariable(visibleVariables.get(bpelVarName)));
+					serviceInstanceIDURL = checkUrl(BPELVariableInjectionUtil
+							.nodeToString(bpelContext.readVariable(visibleVariables.get(bpelVarName))));
 				} else if (bpelVarName.contains(Constants.PlanBuilderBuildPlanInputMessageVarName)) {
 					System.out.println("Found possible input message element");
 				}
@@ -98,6 +100,20 @@ public class ToscaPropertyInjectionUtil {
 		}
 
 		return null;
+	}
+	
+	private static String checkUrl(String url){
+		if(url.trim().isEmpty()){
+			return null;
+		}
+		
+		try {
+			URL urL = new URL(url);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return url;
 	}
 
 	
