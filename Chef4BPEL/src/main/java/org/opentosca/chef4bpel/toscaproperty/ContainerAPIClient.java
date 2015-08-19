@@ -69,6 +69,9 @@ public class ContainerAPIClient {
 		}else {
 			serviceInstanceResourceUrl = url;
 		}
+		
+		System.out.println("Fetching serviceInstance from " + serviceInstanceResourceUrl);
+		
 		HttpResponseMessage serviceInstanceResourceResponse = HighLevelRestApi.Get(serviceInstanceResourceUrl,
 				"application/xml");
 
@@ -165,12 +168,18 @@ public class ContainerAPIClient {
 
 			try {
 				NodeList serviceInstance = (NodeList) serviceInstanceXpath.evaluate(
-						"/*[local-name()='ServiceInstance' and @serviceTemplateID='" + serviceTemplateId + "']", source,
+						"/*[local-name()='ServiceInstance']", source,
 						XPathConstants.NODESET);
 
-				if (serviceInstance.getLength() == 1) {
-					return serviceInstanceUrl;
+				for(int serviceInstancesIndex = 0 ; serviceInstancesIndex < serviceInstance.getLength() ; serviceInstancesIndex++){
+					Element serviceInstanceElement = (Element) serviceInstance.item(serviceInstancesIndex);
+					
+					// TODO must fetch the NS to be sure, but the concept itself doesn't work with them
+					if(serviceInstanceElement.getAttribute("serviceTemplateID").split("\\}")[1].equals(serviceTemplateId)){
+						return serviceInstanceUrl;
+					}
 				}
+								
 			} catch (XPathExpressionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
