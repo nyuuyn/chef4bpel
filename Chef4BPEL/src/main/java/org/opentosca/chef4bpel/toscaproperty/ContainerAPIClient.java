@@ -30,8 +30,9 @@ public class ContainerAPIClient {
 	private static final XPathFactory xpathFactory = XPathFactory.newInstance();
 
 	public static String getProperty(String url, String entityTemplateId, String propertyName) {
-		System.out.println("Starting to fetch TOSCAProperty " + entityTemplateId + "." + propertyName + " from URL " + url);
-		
+		System.out.println(
+				"Starting to fetch TOSCAProperty " + entityTemplateId + "." + propertyName + " from URL " + url);
+
 		for (String entryDefUrl : getEntryDefinitions(url)) {
 			for (String serviceTemplateId : getServiceTemplateIdsFromDefinitionsUrl(entryDefUrl)) {
 				String propertyValue = getProperty(url, serviceTemplateId, entityTemplateId, propertyName);
@@ -47,7 +48,8 @@ public class ContainerAPIClient {
 
 	public static String getProperty(String url, String serviceTemplateId, String entityTemplateId,
 			String propertyName) {
-		System.out.println("Starting to fetch TOSCAProperty " + serviceTemplateId + "." + entityTemplateId + "." + propertyName);
+		System.out.println(
+				"Starting to fetch TOSCAProperty " + serviceTemplateId + "." + entityTemplateId + "." + propertyName);
 		if (url.contains("containerapi/instancedata")) {
 			return getPropertyInstanceDataAPI(url, serviceTemplateId, entityTemplateId, propertyName);
 		} else if (url.contains("containerapi")) {
@@ -77,7 +79,8 @@ public class ContainerAPIClient {
 					source, XPathConstants.NODESET);
 
 			for (int nodeInstancesIndex = 0; nodeInstancesIndex < nodeInstancesList.getLength(); nodeInstancesIndex++) {
-				nodeInstanceUrls.add(((Element)nodeInstancesList.item(nodeInstancesIndex)).getAttributeNS(Constants.xLinkNS,"href"));
+				nodeInstanceUrls.add(((Element) nodeInstancesList.item(nodeInstancesIndex))
+						.getAttributeNS(Constants.xLinkNS, "href"));
 			}
 
 		} catch (XPathExpressionException e) {
@@ -126,7 +129,7 @@ public class ContainerAPIClient {
 
 	private static String getServiceInstance(String url, String serviceTemplateId) {
 		System.out.println("Fetching serviceInstance for " + serviceTemplateId + " from " + url);
-		
+
 		String serviceInstancesResourceUrl = (url.endsWith("/")) ? url + "serviceInstances" : url + "/serviceInstances";
 
 		HttpResponseMessage serviceInstancesResourceResponse = HighLevelRestApi.Get(serviceInstancesResourceUrl,
@@ -143,7 +146,7 @@ public class ContainerAPIClient {
 
 			for (int index = 0; index < serviceInstancesList.getLength(); index++) {
 				serviceInstanceUrls
-						.add(((Element)serviceInstancesList.item(index)).getAttributeNS(Constants.xLinkNS,"href"));
+						.add(((Element) serviceInstancesList.item(index)).getAttributeNS(Constants.xLinkNS, "href"));
 			}
 		} catch (XPathExpressionException e) {
 			// TODO Auto-generated catch block
@@ -151,8 +154,7 @@ public class ContainerAPIClient {
 		}
 
 		for (String serviceInstanceUrl : serviceInstanceUrls) {
-			HttpResponseMessage serviceInstanceResourceResponse = HighLevelRestApi.Get(serviceInstanceUrl,
-					"text/xml");
+			HttpResponseMessage serviceInstanceResourceResponse = HighLevelRestApi.Get(serviceInstanceUrl, "text/xml");
 
 			source = new InputSource(new StringReader(serviceInstanceResourceResponse.getResponseBody()));
 			XPath serviceInstanceXpath = xpathFactory.newXPath();
@@ -177,8 +179,9 @@ public class ContainerAPIClient {
 	private static String getPropertyContainerAPI(String url, String serviceTemplateId, String entityTemplateId,
 			String propertyName) {
 
-		System.out.println("Fetching property with containerAPI");
-		
+		System.out.println("Fetching property " + serviceTemplateId + "." + entityTemplateId + "." + propertyName
+				+ " with containerAPI at " + url);
+
 		List<String> entryDefinitionUrls = getEntryDefinitions(url);
 
 		for (String entryDefinitionUrl : entryDefinitionUrls) {
@@ -199,7 +202,10 @@ public class ContainerAPIClient {
 					System.out.println("No NodeTemplate in Definitions at " + entryDefinitionUrl
 							+ " does contain property " + propertyName);
 				} else {
-					return propertyElementList.item(0).getTextContent();
+					Element propertyElement = (Element) propertyElementList.item(0);
+					System.out.println("Found property element: ");
+					System.out.println(BPELVariableInjectionUtil.nodeToString(propertyElement));
+					return propertyElement.getTextContent();
 				}
 
 			} catch (XPathExpressionException e) {
@@ -220,7 +226,10 @@ public class ContainerAPIClient {
 					System.out.println("No RelationshipTemplate in Definitions at " + entryDefinitionUrl
 							+ " does contain property " + propertyName);
 				} else {
-					return propertyElementList.item(0).getTextContent();
+					Element propertyElement = (Element) propertyElementList.item(0);
+					System.out.println("Found property element: ");
+					System.out.println(BPELVariableInjectionUtil.nodeToString(propertyElement));
+					return propertyElement.getTextContent();
 				}
 
 			} catch (XPathExpressionException e) {
@@ -230,6 +239,8 @@ public class ContainerAPIClient {
 
 		}
 
+		System.out.println("Fetching property " + serviceTemplateId + "." + entityTemplateId + "." + propertyName
+				+ " with containerAPI at " + url + " was unsuccessful!");		
 		return null;
 	}
 
@@ -250,7 +261,7 @@ public class ContainerAPIClient {
 
 			for (int index = 0; index < serviceTemplateList.getLength(); index++) {
 				Node serviceTemplate = serviceTemplateList.item(index);
-				
+
 				Element serviceTemplateElement = (Element) serviceTemplate;
 
 				serviceTemplateIds.add(serviceTemplateElement.getAttribute("id"));
@@ -267,7 +278,7 @@ public class ContainerAPIClient {
 	private static List<String> getEntryDefinitions(String url) {
 
 		System.out.println("Fetching entryDefintiions from " + url);
-		
+
 		String csarsResourceUrl = (url.endsWith("/")) ? url + "CSARs" : url + "/CSARs";
 
 		HttpResponseMessage csarsResourceResponse = HighLevelRestApi.Get(csarsResourceUrl, "text/xml");
@@ -286,11 +297,12 @@ public class ContainerAPIClient {
 				Node reference = referencesList.item(index);
 				System.out.println("Found reference: ");
 				System.out.println(BPELVariableInjectionUtil.nodeToString(reference));
-				
+
 				Element refElement = (Element) reference;
-				
-				
-				if (refElement.hasAttributeNS(Constants.xLinkNS,"title") & refElement.hasAttributeNS(Constants.xLinkNS, "href")& !refElement.getAttributeNS(Constants.xLinkNS,"title").equals("Self")) {
+
+				if (refElement.hasAttributeNS(Constants.xLinkNS, "title")
+						& refElement.hasAttributeNS(Constants.xLinkNS, "href")
+						& !refElement.getAttributeNS(Constants.xLinkNS, "title").equals("Self")) {
 					csarUrls.add(refElement.getAttributeNS(Constants.xLinkNS, "href"));
 				}
 			}
