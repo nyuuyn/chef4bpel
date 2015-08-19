@@ -193,7 +193,7 @@ public class ContainerAPIClient {
 
 			try {
 				String query  = "/*[local-name()='Definitions']/*[local-name()='ServiceTemplate' and @id='" + serviceTemplateId
-						+ "']/*[local-name()='TopologyTemplate']/*[local-name()='NodeTemplate']/*[local-name()='Properties']/*/*[local-name='"
+						+ "']/*[local-name()='TopologyTemplate']/*[local-name()='NodeTemplate']/*[local-name()='Properties']/*/*[local-name()='"
 						+ propertyName + "']";
 				System.out.println("Querying Definitions document for property with following XPath: ");
 				System.out.println(query);
@@ -219,7 +219,7 @@ public class ContainerAPIClient {
 			entryDefinitionResourceXpath = xpathFactory.newXPath();
 			try {
 				String query = "/*[local-name()='Definitions']/*[local-name()='ServiceTemplate' and @id='" + serviceTemplateId
-						+ "']/*[local-name()='TopologyTemplate']/*[local-name()='RelationshipTemplate']/*[local-name()='Properties']/*/*[local-name='"
+						+ "']/*[local-name()='TopologyTemplate']/*[local-name()='RelationshipTemplate']/*[local-name()='Properties']/*/*[local-name()='"
 						+ propertyName + "']";
 				System.out.println("Querying Definitions document for property with following XPath: ");
 				System.out.println(query);
