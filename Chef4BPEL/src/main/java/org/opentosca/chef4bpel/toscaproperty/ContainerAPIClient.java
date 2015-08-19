@@ -192,10 +192,12 @@ public class ContainerAPIClient {
 			XPath entryDefinitionResourceXpath = xpathFactory.newXPath();
 
 			try {
-				NodeList propertyElementList = (NodeList) entryDefinitionResourceXpath.evaluate(
-						"/*[local-name()='Definitions']/*[local-name()='ServiceTemplate' and @id='" + serviceTemplateId
-								+ "']/*[local-name()='TopologyTemplate']/*[local-name()='NodeTemplate']/*[local-name()='Properties']/*/*[local-name='"
-								+ propertyName + "']",
+				String query  = "/*[local-name()='Definitions']/*[local-name()='ServiceTemplate' and @id='" + serviceTemplateId
+						+ "']/*[local-name()='TopologyTemplate']/*[local-name()='NodeTemplate']/*[local-name()='Properties']/*/*[local-name='"
+						+ propertyName + "']";
+				System.out.println("Querying Definitions document for property with following XPath: ");
+				System.out.println(query);
+				NodeList propertyElementList = (NodeList) entryDefinitionResourceXpath.evaluate(query,
 						source, XPathConstants.NODESET);
 
 				if (propertyElementList.getLength() != 1) {
@@ -216,10 +218,13 @@ public class ContainerAPIClient {
 			source = new InputSource(new StringReader(serviceTemplateResourceResponse.getResponseBody()));
 			entryDefinitionResourceXpath = xpathFactory.newXPath();
 			try {
+				String query = "/*[local-name()='Definitions']/*[local-name()='ServiceTemplate' and @id='" + serviceTemplateId
+						+ "']/*[local-name()='TopologyTemplate']/*[local-name()='RelationshipTemplate']/*[local-name()='Properties']/*/*[local-name='"
+						+ propertyName + "']";
+				System.out.println("Querying Definitions document for property with following XPath: ");
+				System.out.println(query);
 				NodeList propertyElementList = (NodeList) entryDefinitionResourceXpath.evaluate(
-						"/*[local-name()='Definitions']/*[local-name()='ServiceTemplate' and @id='" + serviceTemplateId
-								+ "']/*[local-name()='TopologyTemplate']/*[local-name()='RelationshipTemplate']/*[local-name()='Properties']/*/*[local-name='"
-								+ propertyName + "']",
+						query,
 						source, XPathConstants.NODESET);
 
 				if (propertyElementList.getLength() != 1) {
@@ -279,7 +284,7 @@ public class ContainerAPIClient {
 
 	private static List<String> getEntryDefinitions(String url) {
 
-		System.out.println("Fetching entryDefintiions from " + url);
+		System.out.println("Fetching entryDefinitions from " + url);
 
 		String csarsResourceUrl = (url.endsWith("/")) ? url + "CSARs" : url + "/CSARs";
 
